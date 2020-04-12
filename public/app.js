@@ -85,6 +85,7 @@ socket.on('picked one', ({ removed, bowl }) => {
 addForm.addEventListener('submit', (e) => {
     e.preventDefault()
     socket.emit('add to bowl', input.value)
+    input.value = '';
 })
 
 pickOne.addEventListener('click', () => {
