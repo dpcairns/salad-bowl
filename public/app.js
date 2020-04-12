@@ -126,7 +126,7 @@ socket.on('whose turn', (whoseTurn) => {
 
 socket.on('bowlAccessed', ({ bowl, currentTurnUser }) => {
     makeBowl(bowl)
-    setCurrentTurn(whoseTurn)
+    setCurrentTurn(currentTurnUser)
 });
 
 socket.on('refreshed bowl', ({ bowl }) => {
