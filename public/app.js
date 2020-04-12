@@ -61,6 +61,7 @@ function setCurrentTurn(id) {
 
     if (!whoseTurn) {
         whoseTurn = userId
+        socket.emit('my turn', { userId })
     } else {
         turnDiv.style.display = 'block'
     }
