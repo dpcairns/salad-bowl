@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="/socket.io/socket.io.js"></script>
     <title>Document</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -15,15 +17,18 @@
         <input id="add-input" />
         <button>Add!</button>
     </form>
+    <div id="items-count"></div>
+    <button id="pick-one">pick one</button>
+    <br />
+    <div id="picked-div">Your pick: <span id="picked"></span></div>
+
+    <hr />
+
+    <button id="refresh-button">Refill the bowl!</button>
+    <button id="toggle-button">(toggle bowl visiblity)</button>
     <div id="bowl">
 
     </div>
-
-    <button id="pick-one">pick one</button>
-    <br />
-    <div id="picked-div">Your pick! <span id="picked"></span></div>
-    <button id="refresh-button">Refill the bowl!</button>
-    <button id="toggle-button">(toggle bowl visiblity)</button>
     <script type="module" src="app.js"></script>
 </body>
 

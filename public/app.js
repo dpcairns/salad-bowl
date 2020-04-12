@@ -9,7 +9,7 @@ const pickOne = document.getElementById('pick-one')
 const toggleButton = document.getElementById('toggle-button')
 const pickedSpan = document.getElementById('picked')
 const pickedDiv = document.getElementById('picked-div')
-
+const itemsCount = document.getElementById('items-count')
 bowlDiv.style.display = 'none';
 pickedDiv.style.display = 'none';
 
@@ -27,9 +27,12 @@ function makeBowl(bowl) {
     const oldBowlList = document.querySelector('ul')
     const bowlList = document.createElement('ul');
 
+
     if (!Object.keys(bowl).length) {
         pickOne.style.display = 'none';
     } else {
+        itemsCount.textContent = "your bowl has this many items: " + Object.keys(bowl).length;
+
         pickOne.style.display = 'block';
     }
 
