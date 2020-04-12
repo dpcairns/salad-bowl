@@ -11,6 +11,7 @@ const pickedSpan = document.getElementById('picked')
 const pickedDiv = document.getElementById('picked-div')
 const itemsCount = document.getElementById('items-count')
 const clearAllBowls = document.getElementById('clear')
+const myTurn = document.getElementById('toggle-my-turn');
 
 bowlDiv.style.display = 'none';
 pickedDiv.style.display = 'none';
@@ -33,7 +34,6 @@ function makeBowl(bowl) {
     if (!Object.keys(bowl).length) {
         pickOne.style.display = 'none';
         itemsCount.textContent = "Your bowl is empty!"
-        pickedDiv.style.display = 'none'
         document.querySelector('img').src = 'https://www.pamperedchef.com/iceberg/com/product/100188-2-lg.jpg';
     } else {
         itemsCount.textContent = "Your bowl has this many items: " + Object.keys(bowl).length;
@@ -107,4 +107,14 @@ refreshButton.addEventListener('click', () => {
 
 clearAllBowls.addEventListener('click', () => {
     socket.emit('clear bowl')
+})
+
+myTurn.addEventListener('click', () => {
+    const isHidden = pickedDiv.style.display;
+
+    if (isHidden === 'none') {
+        pickedDiv.style.display = 'block'
+    } else {
+        pickedDiv.style.display = 'none'
+    }
 })

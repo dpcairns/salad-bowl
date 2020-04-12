@@ -46,3 +46,8 @@ button:active {
 img {
     width: 200px;
 }
+
+.red {
+    background: indianred !important;
+    box-shadow: none;
+}
