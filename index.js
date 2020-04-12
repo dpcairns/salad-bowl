@@ -17,12 +17,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 let canonicalBowl = {};
 let bowl = {};
+let whoseTurn = null;
+let users = {}
 
 io.on('connection', (socket) => {
-    io.sockets.emit('bowlAccessed', bowl);
+    io.sockets.emit('bowlAccessed', { bowl, currentTurnUser: whoseTurn });
+    socket.on('login', (({ userId }) => {
+        if (!users[userId]) users[userId] = true;
+    }));
 
     // when the client emits 'typing', we broadcast it to others
-    socket.on('add to bowl', (item) => {
+    socket.on('add to bowl', ({ item, userId }) => {
         bowl[item] = true;
         canonicalBowl[item] = true;
 
@@ -30,12 +35,14 @@ io.on('connection', (socket) => {
     });
 
 
-    socket.on('pick one', () => {
+    socket.on('pick one', ({ userId }) => {
         const items = Object.keys(bowl);
         const randomIndex = Math.floor(Math.random() * items.length);
         const itemToRemove = items[randomIndex]
         delete bowl[itemToRemove];
 
+        console.log(items)
+        console.log(itemToRemove)
         console.log(itemToRemove)
         io.sockets.emit('picked one', {
             removed: itemToRemove,
@@ -43,7 +50,7 @@ io.on('connection', (socket) => {
         });
     });
 
-    socket.on('refresh bowl', () => {
+    socket.on('refresh bowl', ({ userId }) => {
         bowl = { ...canonicalBowl };
 
         console.log(canonicalBowl)
@@ -52,8 +59,13 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on('my turn', ({ userId }) => {
+        whoseTurn = userId
 
-    socket.on('clear bowl', () => {
+        io.sockets.emit('whose turn', userId);
+    });
+
+    socket.on('clear bowl', ({ userId }) => {
         bowl = {};
         canonicalBowl = {}
 

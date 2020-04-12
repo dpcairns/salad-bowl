@@ -13,27 +13,38 @@
 </head>
 
 <body>
-    <img src="https://www.pamperedchef.com/iceberg/com/product/100188-2-lg.jpg" />
-    <form id="add-form">
-        <input id="add-input" />
-        <button>Add!</button>
-    </form>
-    <div id="items-count"></div>
-    <button id="pick-one">pick one</button>
-    <br />
-    <button id="toggle-my-turn">Hide/show current word</button>
-    <div id="picked-div">Current pick: <div id="picked"></div>
+    <div id="log-in">
+        <form id="user-form">
+            <input id="user-input" />
+            <button>Log in!</button>
+        </form>
     </div>
+    <div id="logged-in">
+        <img src="https://www.pamperedchef.com/iceberg/com/product/100188-2-lg.jpg" />
+        <h3>Hello, <span id="username"></span>!</h3>
+        <div id="turn-div">It's <span id="turn"></span>'s turn!</div>
+        <button id="take-turn">My turn!</button>
+        <form id="add-form">
+            <input id="add-input" />
+            <button>Add!</button>
+        </form>
+        <div id="items-count"></div>
+        <button id="pick-one">pick one</button>
+        <br />
+        <!-- <button id="toggle-my-turn">Hide/show current word</button> -->
+        <div id="picked-div">Current pick: <div id="picked"></div>
+        </div>
 
-    <hr />
+        <hr />
 
 
-    <button id="refresh-button">Refill the bowl!</button>
-    <button class="red" id="clear">clear all bowls</button>
-    <button id="toggle-button">(hide/show all words)</button>
+        <button id="refresh-button">Refill the bowl!</button>
+        <button class="red" id="clear">clear all bowls</button>
+        <button id="toggle-button">(hide/show all words)</button>
 
-    <div id="bowl">
+        <div id="bowl">
 
+        </div>
     </div>
     <script type="module" src="app.js"></script>
 </body>

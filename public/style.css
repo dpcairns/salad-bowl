@@ -1,4 +1,4 @@
-body, html {
+body, html, #logged-in, #log-in {
     font-family: 'Roboto', sans-serif;
     display: flex;
     justify-content: center;
@@ -6,6 +6,7 @@ body, html {
     flex-direction: column;
     height: 100%;
 }
+
 #picked-div {
     display: flex;
     justify-content: center;

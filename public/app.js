@@ -1,5 +1,7 @@
 var socket = io();
 
+let userId = localStorage.getItem('userId');
+
 const bowlDiv = document.getElementById('bowl');
 
 const input = document.getElementById('add-input');
@@ -11,14 +13,64 @@ const pickedSpan = document.getElementById('picked')
 const pickedDiv = document.getElementById('picked-div')
 const itemsCount = document.getElementById('items-count')
 const clearAllBowls = document.getElementById('clear')
-const myTurn = document.getElementById('toggle-my-turn');
+// const myTurn = document.getElementById('toggle-my-turn');
+const userInputForm = document.getElementById('user-form');
+const userInput = document.getElementById('user-input');
+const takeTurn = document.getElementById('take-turn');
+const turnSpan = document.getElementById('turn');
+const turnDiv = document.getElementById('turn-div');
+
+let whoseTurn = null;
 
 bowlDiv.style.display = 'none';
 pickedDiv.style.visibility = 'hidden';
 
+checkLogin();
+
+function checkLogin() {
+    if (userId) {
+        document.getElementById('log-in').style.display = 'none'
+        document.getElementById('logged-in').style.display = 'flex';
+        document.getElementById('username').textContent = userId;
+
+    } else {
+        document.getElementById('log-in').style.display = 'flex'
+        document.getElementById('logged-in').style.display = 'none';
+    }
+
+}
+
+userInputForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    socket.emit('login', userInput.value)
+    userId = userInput.value;
+    localStorage.setItem('userId', userInput.value);
+    checkLogin();
+})
+
 function showYourItem(item) {
     if (item) {
         pickedSpan.textContent = item;
+    }
+}
+
+function setCurrentTurn(id) {
+    turnSpan.textContent = id;
+    whoseTurn = id;
+    if (whoseTurn === userId) {
+        takeTurn.style.display = 'none';
+        pickedDiv.style.visibility = 'visible';
+
+    } else {
+        takeTurn.style.display = 'flex';
+        pickedDiv.style.visibility = 'hidden';
+    }
+
+    if (!whoseTurn) {
+        turnDiv.style.display = 'none'
+    } else {
+        turnDiv.style.display = 'block'
     }
 }
 
@@ -63,8 +115,14 @@ socket.on('cleared bowl', (bowl) => {
     makeBowl({})
 });
 
-socket.on('bowlAccessed', (bowl) => {
+socket.on('whose turn', (whoseTurn) => {
+    setCurrentTurn(whoseTurn)
+});
+
+
+socket.on('bowlAccessed', ({ bowl, currentTurnUser }) => {
     makeBowl(bowl)
+    setCurrentTurn(whoseTurn)
 });
 
 socket.on('refreshed bowl', ({ bowl }) => {
@@ -81,14 +139,17 @@ socket.on('picked one', ({ removed, bowl }) => {
 addForm.addEventListener('submit', (e) => {
     e.preventDefault()
     if (input.value !== '') {
-        socket.emit('add to bowl', input.value)
+        socket.emit('add to bowl', {
+            item: input.value,
+            userId,
+        });
     }
 
     input.value = '';
 })
 
 pickOne.addEventListener('click', () => {
-    socket.emit('pick one')
+    socket.emit('pick one', { userId })
 })
 
 toggleButton.addEventListener('click', () => {
@@ -102,19 +163,23 @@ toggleButton.addEventListener('click', () => {
 })
 
 refreshButton.addEventListener('click', () => {
-    socket.emit('refresh bowl')
+    socket.emit('refresh bowl', { userId })
 })
 
 clearAllBowls.addEventListener('click', () => {
-    socket.emit('clear bowl')
+    socket.emit('clear bowl', { userId })
 })
 
-myTurn.addEventListener('click', () => {
-    const isHidden = pickedDiv.style.visibility;
+// myTurn.addEventListener('click', () => {
+//     const isHidden = pickedDiv.style.visibility;
 
-    if (isHidden === 'hidden') {
-        pickedDiv.style.visibility = 'visible'
-    } else {
-        pickedDiv.style.visibility = 'hidden'
-    }
+//     if (isHidden === 'hidden') {
+//         pickedDiv.style.visibility = 'visible'
+//     } else {
+//         pickedDiv.style.visibility = 'hidden'
+//     }
+// })
+
+takeTurn.addEventListener('click', () => {
+    socket.emit('my turn', { userId })
 })
