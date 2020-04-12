@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
     socket.on('refresh bowl', () => {
         bowl = canonicalBowl;
 
-        socket.broadcast.emit('refreshed bowl', {
+        socket.emit('refreshed bowl', {
             bowl: canonicalBowl,
         });
     });

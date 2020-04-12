@@ -1,9 +1,38 @@
 var socket = io();
 
+const bowlDiv = document.getElementById('bowl');
+
+const input = document.getElementById('add-input');
+const addForm = document.getElementById('add-form')
+const refreshButton = document.getElementById('refresh-button')
+const pickOne = document.getElementById('pick-one')
+const toggleButton = document.getElementById('toggle-button')
+const pickedSpan = document.getElementById('picked')
+const pickedDiv = document.getElementById('picked-div')
+
+bowlDiv.style.display = 'none';
+pickedDiv.style.display = 'none';
+
+function showYourItem(item) {
+    if (item) {
+        pickedDiv.style.display = 'block';
+
+        pickedSpan.textContent = item;
+    } else {
+        pickedDiv.style.display = 'none';
+    }
+}
+
 function makeBowl(bowl) {
-    const bowlDiv = document.getElementById('bowl');
     const oldBowlList = document.querySelector('ul')
-    const bowlList = document.createElement('ul')
+    const bowlList = document.createElement('ul');
+
+    if (!Object.keys(bowl).length) {
+        pickOne.style.display = 'none';
+    } else {
+        pickOne.style.display = 'block';
+    }
+
     Object.keys(bowl).forEach(item => {
         const div = document.createElement('div');
 
@@ -25,20 +54,19 @@ socket.on('added to bowl', (bowl) => {
 });
 
 socket.on('bowlAccessed', (bowl) => {
-    console.log('accessed', bowl);
+    makeBowl(bowl)
+});
+
+socket.on('refreshed bowl', ({ bowl }) => {
+    console.log('refreshed', bowl);
     makeBowl(bowl)
 });
 
 socket.on('picked one', ({ removed, bowl }) => {
     console.log('removed', removed);
-
+    showYourItem(removed)
     makeBowl(bowl)
 });
-
-const input = document.getElementById('add-input');
-const addForm = document.getElementById('add-form')
-const refreshButton = document.getElementById('refresh-button')
-const pickOne = document.getElementById('pick-one')
 
 addForm.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -47,4 +75,18 @@ addForm.addEventListener('submit', (e) => {
 
 pickOne.addEventListener('click', () => {
     socket.emit('pick one')
+})
+
+toggleButton.addEventListener('click', () => {
+    const isHidden = bowlDiv.style.display;
+
+    if (isHidden === 'none') {
+        bowlDiv.style.display = 'block'
+    } else {
+        bowlDiv.style.display = 'none'
+    }
+})
+
+refreshButton.addEventListener('click', () => {
+    socket.emit('refresh bowl')
 })
