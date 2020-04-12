@@ -10,6 +10,8 @@ const toggleButton = document.getElementById('toggle-button')
 const pickedSpan = document.getElementById('picked')
 const pickedDiv = document.getElementById('picked-div')
 const itemsCount = document.getElementById('items-count')
+const clearAllBowls = document.getElementById('clear')
+
 bowlDiv.style.display = 'none';
 pickedDiv.style.display = 'none';
 
@@ -30,8 +32,10 @@ function makeBowl(bowl) {
 
     if (!Object.keys(bowl).length) {
         pickOne.style.display = 'none';
+        itemsCount.textContent = "Your bowl is empty!"
+        pickedDiv.style.display = 'none'
     } else {
-        itemsCount.textContent = "your bowl has this many items: " + Object.keys(bowl).length;
+        itemsCount.textContent = "Your bowl has this many items: " + Object.keys(bowl).length;
 
         pickOne.style.display = 'block';
     }
@@ -54,6 +58,11 @@ function makeBowl(bowl) {
 socket.on('added to bowl', (bowl) => {
     console.log('added');
     makeBowl(bowl)
+});
+
+socket.on('cleared bowl', (bowl) => {
+    console.log('cleared');
+    makeBowl({})
 });
 
 socket.on('bowlAccessed', (bowl) => {
@@ -92,4 +101,8 @@ toggleButton.addEventListener('click', () => {
 
 refreshButton.addEventListener('click', () => {
     socket.emit('refresh bowl')
+})
+
+clearAllBowls.addEventListener('click', () => {
+    socket.emit('clear bowl')
 })

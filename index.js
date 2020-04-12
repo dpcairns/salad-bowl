@@ -15,28 +15,13 @@ server.listen(port, () => {
 // Routing
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Chatroom
-
-const canonicalBowl = {};
+let canonicalBowl = {};
 let bowl = {};
 
 io.on('connection', (socket) => {
     io.sockets.emit('bowlAccessed', bowl);
 
     // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', () => {
-        socket.broadcast.emit('typing', {
-            username: socket.username
-        });
-    });
-
-    // when the client emits 'stop typing', we broadcast it to others
-    socket.on('stop typing', () => {
-        socket.broadcast.emit('stop typing', {
-            username: socket.username
-        });
-    });
-
     socket.on('add to bowl', (item) => {
         bowl[item] = true;
         canonicalBowl[item] = true;
@@ -59,10 +44,21 @@ io.on('connection', (socket) => {
     });
 
     socket.on('refresh bowl', () => {
-        bowl = canonicalBowl;
+        bowl = { ...canonicalBowl };
 
+        console.log(canonicalBowl)
         io.sockets.emit('refreshed bowl', {
             bowl: canonicalBowl,
+        });
+    });
+
+
+    socket.on('clear bowl', () => {
+        bowl = {};
+        canonicalBowl = {}
+
+        io.sockets.emit('cleared bowl', {
+            bowl: {},
         });
     });
 });
