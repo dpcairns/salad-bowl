@@ -34,10 +34,12 @@ function makeBowl(bowl) {
         pickOne.style.display = 'none';
         itemsCount.textContent = "Your bowl is empty!"
         pickedDiv.style.display = 'none'
+        document.querySelector('img').src = 'https://www.pamperedchef.com/iceberg/com/product/100188-2-lg.jpg';
     } else {
         itemsCount.textContent = "Your bowl has this many items: " + Object.keys(bowl).length;
-
         pickOne.style.display = 'block';
+        document.querySelector('img').src = 'https://www.pamperedchef.com/iceberg/com/product/100188-lg.jpg';
+
     }
 
     Object.keys(bowl).forEach(item => {
