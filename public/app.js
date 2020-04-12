@@ -14,15 +14,15 @@ const clearAllBowls = document.getElementById('clear')
 const myTurn = document.getElementById('toggle-my-turn');
 
 bowlDiv.style.display = 'none';
-pickedDiv.style.display = 'none';
+pickedDiv.style.visibility = 'hidden';
 
 function showYourItem(item) {
     if (item) {
-        pickedDiv.style.display = 'block';
+        pickedDiv.style.visibility = 'visible';
 
         pickedSpan.textContent = item;
     } else {
-        pickedDiv.style.display = 'none';
+        pickedDiv.style.visibility = 'hidden';
     }
 }
 
@@ -114,11 +114,11 @@ clearAllBowls.addEventListener('click', () => {
 })
 
 myTurn.addEventListener('click', () => {
-    const isHidden = pickedDiv.style.display;
+    const isHidden = pickedDiv.style.visibility;
 
-    if (isHidden === 'none') {
-        pickedDiv.style.display = 'block'
+    if (isHidden === 'hidden') {
+        pickedDiv.style.visibility = 'visible'
     } else {
-        pickedDiv.style.display = 'none'
+        pickedDiv.style.visibility = 'hidden'
     }
 })
