@@ -58,19 +58,22 @@ function showYourItem(item) {
 function setCurrentTurn(id) {
     turnSpan.textContent = id;
     whoseTurn = id;
+
+    if (!whoseTurn) {
+        whoseTurn = userId
+    } else {
+        turnDiv.style.display = 'block'
+    }
+
     if (whoseTurn === userId) {
         takeTurn.style.display = 'none';
         pickedDiv.style.visibility = 'visible';
+        pickOne.style.visibility = 'none'
 
     } else {
         takeTurn.style.display = 'flex';
         pickedDiv.style.visibility = 'hidden';
-    }
-
-    if (!whoseTurn) {
-        turnDiv.style.display = 'none'
-    } else {
-        turnDiv.style.display = 'block'
+        pickOne.style.visibility = 'visible'
     }
 }
 
