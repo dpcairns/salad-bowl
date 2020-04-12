@@ -18,11 +18,7 @@ pickedDiv.style.visibility = 'hidden';
 
 function showYourItem(item) {
     if (item) {
-        pickedDiv.style.visibility = 'visible';
-
         pickedSpan.textContent = item;
-    } else {
-        pickedDiv.style.visibility = 'hidden';
     }
 }
 
