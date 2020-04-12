@@ -19,7 +19,7 @@ const canonicalBowl = {};
 let bowl = {};
 
 io.on('connection', (socket) => {
-    socket.emit('bowlAccessed', bowl);
+    socket.sockets.emit('bowlAccessed', bowl);
 
     // when the client emits 'typing', we broadcast it to others
     socket.on('typing', () => {
@@ -39,7 +39,7 @@ io.on('connection', (socket) => {
         bowl[item] = true;
         canonicalBowl[item] = true;
 
-        socket.emit('added to bowl', bowl);
+        socket.sockets.emit('added to bowl', bowl);
     });
 
 
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
         delete bowl[itemToRemove];
 
         console.log(itemToRemove)
-        socket.emit('picked one', {
+        socket.sockets.emit('picked one', {
             removed: itemToRemove,
             bowl
         });
@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
     socket.on('refresh bowl', () => {
         bowl = canonicalBowl;
 
-        socket.emit('refreshed bowl', {
+        socket.sockets.emit('refreshed bowl', {
             bowl: canonicalBowl,
         });
     });
