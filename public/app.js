@@ -69,12 +69,12 @@ function setCurrentTurn(id) {
     if (whoseTurn === userId) {
         takeTurn.style.display = 'none';
         pickedDiv.style.visibility = 'visible';
-        pickOne.style.visibility = 'none'
+        pickOne.style.visibility = 'visible'
 
     } else {
         takeTurn.style.display = 'flex';
         pickedDiv.style.visibility = 'hidden';
-        pickOne.style.visibility = 'visible'
+        pickOne.style.visibility = 'hidden'
     }
 }
 

@@ -41,9 +41,6 @@ io.on('connection', (socket) => {
         const itemToRemove = items[randomIndex]
         delete bowl[itemToRemove];
 
-        console.log(items)
-        console.log(itemToRemove)
-        console.log(itemToRemove)
         io.sockets.emit('picked one', {
             removed: itemToRemove,
             bowl
