@@ -38,6 +38,7 @@ function checkLogin() {
         document.getElementById('username').textContent = userId;
 
     } else {
+
         document.getElementById('log-in').style.display = 'flex'
         document.getElementById('logged-in').style.display = 'none';
     }
@@ -143,12 +144,10 @@ function makeBowl(bowl) {
 }
 
 socket.on('added to bowl', (bowl) => {
-    console.log('added');
     makeBowl(bowl)
 });
 
 socket.on('cleared bowl', (bowl) => {
-    console.log('cleared');
     makeBowl({})
 });
 
@@ -167,12 +166,10 @@ socket.on('bowlAccessed', ({ bowl, currentTurnUser, gameIsRunningServer }) => {
 });
 
 socket.on('refreshed bowl', ({ bowl }) => {
-    console.log('refreshed', bowl);
     makeBowl(bowl)
 });
 
 socket.on('picked one', ({ removed, bowl }) => {
-    console.log('removed', removed);
     showYourItem(removed)
     makeBowl(bowl)
 });
@@ -227,4 +224,6 @@ takeTurn.addEventListener('click', () => {
 
 logOut.addEventListener('click', () => {
     localStorage.clear();
+    userId = null;
+    checkLogin();
 })

@@ -41,7 +41,6 @@ io.on('connection', (socket) => {
 
     socket.on('toggleRunningGame', (gameState) => {
         gameIsRunning = gameState;
-        console.log(gameState)
         socket.emit('gameStateChanged', gameState)
     })
 
@@ -60,7 +59,6 @@ io.on('connection', (socket) => {
     socket.on('refresh bowl', ({ userId }) => {
         bowl = { ...canonicalBowl };
 
-        console.log(canonicalBowl)
         io.sockets.emit('refreshed bowl', {
             bowl: canonicalBowl,
         });
