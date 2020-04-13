@@ -19,9 +19,14 @@ let canonicalBowl = {};
 let bowl = {};
 let whoseTurn = null;
 let users = {}
+let gameIsRunning = false;
 
 io.on('connection', (socket) => {
-    io.sockets.emit('bowlAccessed', { bowl, currentTurnUser: whoseTurn });
+    io.sockets.emit('bowlAccessed', {
+        bowl,
+        currentTurnUser: whoseTurn,
+        gameIsRunningServer: gameIsRunning
+    });
     socket.on('login', (({ userId }) => {
         if (!users[userId]) users[userId] = true;
     }));
@@ -34,6 +39,11 @@ io.on('connection', (socket) => {
         io.sockets.emit('added to bowl', bowl);
     });
 
+    socket.on('toggleRunningGame', (gameState) => {
+        gameIsRunning = gameState;
+        console.log(gameState)
+        socket.emit('gameStateChanged', gameState)
+    })
 
     socket.on('pick one', ({ userId }) => {
         const items = Object.keys(bowl);

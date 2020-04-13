@@ -19,13 +19,16 @@ const userInput = document.getElementById('user-input');
 const takeTurn = document.getElementById('take-turn');
 const turnSpan = document.getElementById('turn');
 const turnDiv = document.getElementById('turn-div');
+const startStopButton = document.getElementById('start-stop')
 
 let whoseTurn = null;
+let gameIsRunning = false;
 
 bowlDiv.style.display = 'none';
 pickedDiv.style.visibility = 'hidden';
 
 checkLogin();
+checkGameIsRunning();
 
 function checkLogin() {
     if (userId) {
@@ -39,6 +42,35 @@ function checkLogin() {
     }
 
 }
+
+function checkGameIsRunning() {
+    if (gameIsRunning) {
+        addForm.style.visibility = 'hidden';
+        turnDiv.style.visibility = 'visible'
+    } else {
+        addForm.style.visibility = 'visible';
+        turnDiv.style.visibility = 'hidden'
+    }
+};
+
+startStopButton.addEventListener('click', (e) => {
+    socket.emit('toggleRunningGame', !gameIsRunning);
+    checkGameIsRunning();
+})
+
+socket.on('gameStateChanged', (newGameState) => {
+    gameIsRunning = newGameState;
+    startStopButton.textContent = gameIsRunning ? 'Stop Game' : 'Start Game';
+
+    if (gameIsRunning) {
+        startStopButton.classList.add('red')
+        startStopButton.textContent = 'Stop game'
+    } else {
+        startStopButton.classList.remove('red')
+        startStopButton.textContent = 'Start game'
+    }
+    checkGameIsRunning();
+})
 
 userInputForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -82,16 +114,16 @@ function makeBowl(bowl) {
     const oldBowlList = document.querySelector('ul')
     const bowlList = document.createElement('ul');
 
-
     if (!Object.keys(bowl).length) {
         pickOne.style.display = 'none';
         itemsCount.textContent = "Your bowl is empty!"
         document.querySelector('img').src = 'https://www.pamperedchef.com/iceberg/com/product/100188-2-lg.jpg';
+        startStopButton.style.visibility = 'hidden';
     } else {
         itemsCount.textContent = "Your bowl has this many items: " + Object.keys(bowl).length;
         pickOne.style.display = 'block';
+        startStopButton.style.visibility = 'visible';
         document.querySelector('img').src = 'https://www.pamperedchef.com/iceberg/com/product/100188-lg.jpg';
-
     }
 
     Object.keys(bowl).forEach(item => {
@@ -123,10 +155,14 @@ socket.on('whose turn', (whoseTurn) => {
     setCurrentTurn(whoseTurn)
 });
 
-
-socket.on('bowlAccessed', ({ bowl, currentTurnUser }) => {
+socket.on('toggle game', (isRunning) => {
+    gameIsRunning = isRunning;
+})
+socket.on('bowlAccessed', ({ bowl, currentTurnUser, gameIsRunningServer }) => {
     makeBowl(bowl)
     setCurrentTurn(currentTurnUser)
+    gameIsRunning = gameIsRunningServer;
+    checkGameIsRunning()
 });
 
 socket.on('refreshed bowl', ({ bowl }) => {
