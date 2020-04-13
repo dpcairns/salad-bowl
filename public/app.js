@@ -20,6 +20,7 @@ const takeTurn = document.getElementById('take-turn');
 const turnSpan = document.getElementById('turn');
 const turnDiv = document.getElementById('turn-div');
 const startStopButton = document.getElementById('start-stop')
+const logOut = document.getElementById('log-out');
 
 let whoseTurn = null;
 let gameIsRunning = false;
@@ -222,4 +223,8 @@ clearAllBowls.addEventListener('click', () => {
 
 takeTurn.addEventListener('click', () => {
     socket.emit('my turn', { userId })
+})
+
+logOut.addEventListener('click', () => {
+    localStorage.clear();
 })
